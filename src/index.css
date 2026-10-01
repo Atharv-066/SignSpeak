@@ -1,0 +1,57 @@
+:root {
+  --bg: #120f1a;
+  --bg-alt: #1a1526;
+  --panel: #201a2e;
+  --panel-border: #332a47;
+  --ink: #f5f1fa;
+  --ink-dim: #9c92b0;
+  --ink-faint: #695f7d;
+
+  /* Idle (no gesture) -> Confirm (gesture held) — functional color, not
+     decorative. See utils/mixColor.js */
+  --idle: #6ea8ff;
+  --idle-dim: #1f3a63;
+  --confirm: #ff8a5c;
+  --confirm-dim: #5c2f1c;
+  --success: #52d9b3;
+  --success-dim: #1e4a3e;
+  --danger: #ff6b6b;
+
+  --font-display: "Newsreader", Georgia, serif;
+  --font-body: "Manrope", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, textarea {
+  font-family: var(--font-body);
+}
+
+button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--idle);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--confirm-dim);
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
