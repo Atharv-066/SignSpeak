@@ -1,157 +1,210 @@
 # SignSpeak
 
-Real-time hand-gesture → text → voice, running entirely on-device in the
-browser. Built as a proper multi-page React app with shared state via
-Context — not a single demo screen.
+Real-time hand-gesture → text → voice, running entirely on-device in the browser. Built as a proper multi-page React app with shared state via Context — not a single demo screen.
 
-## Folder structure
+## Folder Structure
 
-```
+```text
 signspeak-react/
 ├── package.json
 ├── public/
 │   └── index.html
 └── src/
-    ├── App.js / App.css            ← router + layout + global styles
+    ├── App.js / App.css
     ├── context/
-    │   └── GestureContext.js        ← single source of truth: sentence, history, custom word map, settings
+    │   └── GestureContext.js
     ├── hooks/
-    │   ├── useHandGestures.js       ← camera + MediaPipe + hold-to-confirm logic
-    │   └── useLocalStorage.js       ← generic persistence hook
+    │   ├── useHandGestures.js
+    │   └── useLocalStorage.js
     ├── utils/
-    │   ├── gestures.js              ← hand-shape classification (pure, no React)
-    │   ├── mixColor.js              ← confidence-driven color interpolation
-    │   └── id.js                    ← id generator
+    │   ├── gestures.js
+    │   ├── mixColor.js
+    │   └── id.js
     ├── components/
     │   ├── NavBar.js
     │   ├── CameraPanel.js
     │   └── SentencePanel.js
     └── pages/
-        ├── LiveTranslate.js         ← "/"  — the camera + recognition screen
-        ├── GestureLibrary.js        ← "/library" — browse & customize the word each gesture speaks
-        ├── History.js               ← "/history" — saved sentences, replay/delete
-        ├── Settings.js              ← "/settings" — tune hold-time & detection confidence, export/import data
-        └── About.js                 ← "/about" — problem statement, solution, feasibility, future scope
+        ├── LiveTranslate.js
+        ├── GestureLibrary.js
+        ├── History.js
+        ├── Settings.js
+        └── About.js
 ```
 
 ## Setup
 
-```
+```bash
 cd signspeak-react
 npm install
 npm start
 ```
 
-Opens at `http://localhost:3000`, asks for camera permission — allow it.
-Chrome or Edge for best MediaPipe support. Needs internet once for
-`npm install` (downloads React, MediaPipe, react-router) — do this well
-before your demo slot.
+The application opens at `http://localhost:3000`. Allow camera access when prompted.
 
-## What makes this "smart" rather than a fixed demo
+Chrome or Edge is recommended for the best MediaPipe support. An internet connection is required during `npm install` to download React, MediaPipe and React Router.
 
-- **Customizable gesture vocabulary** (Gesture Library page) — every
-  gesture's spoken word is editable and persists across sessions. The
-  same 8 hand shapes can be relabeled for a different classroom,
-  workplace, or language without touching code.
-- **Confidence-driven color** — the readout and progress ring shift from
-  cool blue to warm coral as a gesture is held, so color is genuinely
-  communicating recognition confidence, not decorating the screen.
-- **Tunable recognition** (Settings page) — hold-time, cooldown, and
-  MediaPipe detection/tracking confidence are all adjustable and take
-  effect immediately on Live Translate, no camera restart needed.
-- **Voice controls** (Settings page) — pick the system voice, speaking
-  rate, and pitch, with a one-click preview.
-- **Pause without leaving the page** — a Pause button on Live Translate
-  stops processing (and dims the preview) without releasing the camera
-  or navigating away.
-- **Typed fallback** — a "type a word or phrase" box on Live Translate
-  adds words to the sentence without a gesture, useful when a shape
-  isn't recognized or when the other person in the conversation wants
-  to type a reply that gets spoken aloud.
-- **Keyboard shortcuts** on Live Translate: <kbd>Space</kbd> to speak,
-  <kbd>Backspace</kbd> to undo the last word, <kbd>Enter</kbd> to save.
-- **Searchable history** with per-entry replay/delete, "clear all", and
-  export of the whole history as a plain-text file (in addition to the
-  full JSON export/import of word map + settings + history).
-- **Friendly camera errors** — permission-denied, no-camera-found, and
-  camera-in-use are each reported with a specific message and a Retry
-  button, instead of a generic stuck "Starting camera…" status.
-- **On-device only** — no backend, no API cost, no video ever leaves the
-  browser. That's a real, defensible privacy/scalability point for a
-  judge panel, not just a nice-to-have.
+## Features
 
-## Demo script (aim for under 2 minutes)
+### 1. Customizable Gesture Vocabulary
 
-1. **About page** (10s) — state the problem in one sentence: communication
-   friction for speech/hearing-impaired people, and that most tools need
-   a server or expensive hardware. This one doesn't.
-2. **Live Translate** (40s) — show Open Palm → "Hello", hold Point → "You",
-   hit Speak. Point out the color ring shifting blue → coral as you hold
-   a gesture — that's live confidence, not a fixed timer bar.
-3. **Gesture Library** (20s) — rename one gesture's word live (e.g. change
-   "Peace" to something else), go back to Live Translate, show the new
-   word comes out of that same gesture immediately. This is the moment
-   that proves it's a flexible system, not a hardcoded demo.
-4. **History** (10s) — save a sentence, show it logged with a timestamp,
-   replay it with the speaker icon.
-5. **Settings** (10s) — show the hold-time slider, mention it's there so
-   the app adapts to different lighting/hardware rather than only working
-   in ideal studio conditions.
-6. Close on the **Future scope** section of About — full ISL dataset
-   training, multi-language voices, shareable vocabulary presets. Shows
-   judges you know exactly where the honest boundary of a one-day build
-   is, and what comes next.
+* The Gesture Library page allows users to customize the word associated with each gesture.
+* Changes persist across sessions.
+* The same eight hand shapes can be assigned different words without modifying the source code.
 
-## Gesture set (custom, not full ISL/ASL — stated honestly in-app)
+### 2. Confidence-Driven Colors
 
-| Gesture | Default word |
-|---|---|
-| Open palm | Hello |
-| Fist | Stop |
-| Thumbs up | Yes |
-| Thumbs down | No |
-| Peace sign | Peace |
-| Point | You |
-| Pinky only | Wait |
-| I Love You (🤟) | Love |
+* The recognition readout and progress ring change color as a gesture is held.
+* The color transitions from cool blue to warm coral, visually communicating recognition confidence.
 
-All editable on the Gesture Library page.
+### 3. Adjustable Recognition Settings
 
-## Tuning if the demo is glitchy
+* Adjust gesture hold time and cooldown.
+* Configure MediaPipe detection and tracking confidence.
+* Settings take effect on Live Translate without requiring a camera restart.
 
-- **Camera won't start** — must be on `localhost`, not `file://`. Check
-  permission was granted.
-- **Gestures misread** — test in your actual demo lighting beforehand.
-  Lower "Detection confidence" and "Tracking confidence" in Settings if
-  tracking keeps dropping out in dim light.
-- **Triggers too fast/slow** — adjust "Hold time" in Settings.
-- All settings + your word customizations + history persist in
-  `localStorage`, so once tuned they stay tuned across reloads.
+### 4. Voice Controls
+
+* Select the system voice.
+* Adjust speaking rate and pitch.
+* Preview voice settings with one click.
+
+### 5. Pause and Resume
+
+* Pause gesture recognition without leaving the Live Translate page.
+* The camera preview dims while processing is paused.
+* Resume recognition without navigating away.
+
+### 6. Typed Input
+
+* Type words or phrases when a gesture is not recognized.
+* Add typed text directly to the sentence.
+* Use text-to-speech to speak the resulting sentence.
+
+### 7. Keyboard Shortcuts
+
+| Key       | Action             |
+| --------- | ------------------ |
+| Space     | Speak              |
+| Backspace | Undo the last word |
+| Enter     | Save the sentence  |
+
+### 8. Searchable History
+
+* Save and search previously created sentences.
+* Replay or delete individual entries.
+* Clear all history.
+* Export history as a plain-text file.
+* Export and import settings, gesture vocabulary and history in JSON format.
+
+### 9. Friendly Camera Errors
+
+Specific error messages and a Retry button are provided for:
+
+* Camera permission denied
+* No camera found
+* Camera already in use
+* MediaPipe model loading failure
+
+### 10. On-Device Processing
+
+* Gesture recognition runs directly in the browser.
+* No application backend or API cost is required.
+* Camera video is processed locally and is not sent to a server.
+
+## Demo Script (Under 2 Minutes)
+
+### 1. About Page (10 seconds)
+
+Introduce the communication challenges faced by people with speech or hearing impairments. Explain that SignSpeak provides an on-device approach without requiring a server or expensive dedicated hardware.
+
+### 2. Live Translate (40 seconds)
+
+* Demonstrate Open Palm → Hello.
+* Demonstrate Point → You.
+* Press Speak to hear the sentence.
+* Show the confidence-driven color transition as a gesture is held.
+
+### 3. Gesture Library (20 seconds)
+
+* Change a gesture's default word, such as renaming Peace to another word.
+* Return to Live Translate.
+* Demonstrate that the updated word is used for the same gesture.
+
+### 4. History (10 seconds)
+
+* Save a sentence.
+* Show the saved entry and its timestamp.
+* Replay it using the speaker button.
+
+### 5. Settings (10 seconds)
+
+* Demonstrate the hold-time slider.
+* Explain how recognition settings can be adjusted for different environments.
+
+### 6. Future Scope (10 seconds)
+
+Conclude with the future scope on the About page:
+
+* Full Indian Sign Language (ISL) dataset training
+* Multilingual voices
+* Shareable gesture vocabulary presets
+
+## Gesture Set
+
+The current gesture set is custom and is not a complete implementation of ISL or ASL.
+
+| Gesture         | Default Word |
+| --------------- | ------------ |
+| Open Palm       | Hello        |
+| Fist            | Stop         |
+| Thumbs Up       | Yes          |
+| Thumbs Down     | No           |
+| Peace Sign      | Peace        |
+| Point           | You          |
+| Pinky Only      | Wait         |
+| I Love You (🤟) | Love         |
+
+All eight gesture labels are editable on the Gesture Library page.
+
+## Troubleshooting
+
+### Camera Won't Start
+
+* Run the application on `localhost`, not through `file://`.
+* Check that camera permission has been granted.
+* Make sure another application is not using the camera.
+
+### Gestures Are Misread
+
+* Test in the lighting conditions expected during the demonstration.
+* Lower detection and tracking confidence in Settings if tracking frequently drops out.
+* Keep your hand clearly visible within the camera frame.
+
+### Gestures Trigger Too Quickly or Slowly
+
+Adjust the hold-time setting on the Settings page.
+
+### Settings Are Not Retained
+
+Settings, gesture customizations and history are stored in browser `localStorage` and persist across reloads in the same browser.
 
 ## Changelog
 
-Fixes and additions made in this pass:
+### Fixes
 
-- **Fixed:** detection/tracking confidence sliders in Settings now apply
-  live to the running MediaPipe model instead of silently requiring a
-  page navigation to take effect.
-- **Fixed:** the `<video>` element now has `autoPlay`/`muted`/`playsInline`
-  explicitly set, which some browsers (notably Safari) require to
-  reliably autoplay a camera stream.
-- **Fixed:** an FPS-counter glitch that could flash `Infinity`/absurd
-  values on the very first couple of frames.
-- **Fixed:** camera-start failures (permission denied, no camera, camera
-  already in use, model failed to load) now surface a specific message
-  and a Retry button instead of leaving the status stuck.
-- **Fixed:** a single dropped MediaPipe frame no longer has a chance to
-  throw an unhandled rejection that could quietly stall recognition.
-- **Added:** Pause/Resume on the camera panel.
-- **Added:** an 8th gesture (🤟 "I love you" → *Love*).
-- **Added:** typed fallback input for adding words/phrases without a
-  gesture.
-- **Added:** voice, speaking-rate, and pitch controls with preview.
-- **Added:** keyboard shortcuts on Live Translate.
-- **Added:** history search and a plain-text export.
-- **Added:** a subtle flash animation and `aria-live` region on the
-  camera readout so a confirmed word is easier to notice, including for
-  screen readers.
+* Fixed detection and tracking confidence sliders so that changes apply to the running MediaPipe model without requiring page navigation.
+* Explicitly configured video elements with `autoPlay`, `muted` and `playsInline` for more reliable camera playback.
+* Fixed an FPS counter issue that could display `Infinity` or unusually high values during initial frames.
+* Improved camera-start error handling with specific messages and a Retry button.
+* Improved handling of dropped MediaPipe frames to prevent recognition from stalling.
+
+### Additions
+
+* Added Pause and Resume controls to the camera panel.
+* Added an eighth gesture: I Love You (🤟) → Love.
+* Added typed fallback input.
+* Added voice, speaking-rate and pitch controls with preview.
+* Added keyboard shortcuts to Live Translate.
+* Added history search and plain-text export.
+* Added a subtle confirmation animation and an `aria-live` region to make recognized words easier to notice, including for screen-reader users.
